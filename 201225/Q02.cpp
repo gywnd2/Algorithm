@@ -13,7 +13,7 @@ int main()
 
     cin >> N >> M >> K;
     cout << "배열 입력 : ";
-    cin.ignore();
+    cin.ignore(); // 버퍼에 개행문자가 남아 있기 때문에 ignore => 마지막 한 문자를 버퍼에서 털어주는 그런함수
     getline(cin, strInput);
 
     string strNum = "";
@@ -41,12 +41,22 @@ int main()
 
     while (i <= M)
     {
-        for (; j <= K && i < M; j++) // 왜 i<=M 이면 답이 안나오지? 왜 583 24546은 있으나 없으나 똑같고 572 34343은 답이 다르지?
+        for (j; i <= M && j <= K; j++)
         {
-            result += vecNum[idx];
-            cout << "adding : " << vecNum[idx] << endl;
-            i++;
+            if (i < M)
+            {
+                result += vecNum[idx];
+                cout << "adding : " << vecNum[idx] << endl;
+                i++;
+            }
         }
+
+        /*
+        46 행의 i<M을 넣어야 i/j가 8/2인 상황이 되었을때 총 연산수를 충족 했으므로
+        멈출 수 있다. 없으면 j가 충족 되지 않았으므로 한번 더 수행하고 그때
+        둘다 만족한다는 조건에 충족 하지 않으므로 끝나게 되어 값이 틀림.
+        ||을 쓰면 i가 M에 도달할때 까지 문제의 규칙을 모두 무시하고 더함.
+         */
 
         result += vecNum[idx + 1];
         cout << "adding : " << vecNum[idx + 1] << endl;
