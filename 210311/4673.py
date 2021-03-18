@@ -1,10 +1,9 @@
 def selfNum():
     num=1
     sum=0
-    genList = list()
+    genList = list() #
     numList = list(i + 1 for i in range(9999))
-    print(numList)
-    while sum<=10000:
+    while num<=10000:
         sum=0
         sum += num
         num=str(num)
@@ -20,7 +19,6 @@ def selfNum():
 
     for n in numList:
        print(n)
-
 
 selfNum()
 
