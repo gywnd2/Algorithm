@@ -17,7 +17,7 @@ def QuickSort(arr, first, last):
         # 만약 좌한계 우한계가 엇갈리면 작은 값을 피봇과 교환
         if left>right:
             arr[right],arr[pivot]=arr[pivot],arr[right]
-        #
+        # 엇갈리지 않았다면 정상적으로 작은값과 큰값을 교환
         else:
             arr[left],arr[right]=arr[right], arr[left]
     QuickSort(arr, first, right-1)
@@ -26,3 +26,5 @@ def QuickSort(arr, first, last):
 arr=[5,7,9,0,3,1,6,2,4,8]
 QuickSort(arr,0,len(arr)-1)
 print(arr)
+
+
