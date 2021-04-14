@@ -6,6 +6,6 @@ def insertionSort(arr):
             else:
                 break
 
-arr=[3,2,1,0,5,6,6]
+arr=[0,2,1,0,887,2,1,2,342421,0,563,0,0,1]
 insertionSort(arr)
 print(arr)
