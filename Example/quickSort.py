@@ -5,7 +5,7 @@ def quickSort(arr, l, r):
     while p<=q:
         while p<=r and arr[p]<=arr[pivot]:
             p+=1
-        while q>l and arr[q]>=arr[pivot]:
+        while q>l and arr[q]>arr[pivot]:
             q-=1
         if p>q:
             arr[q], arr[pivot]=arr[pivot], arr[q]
