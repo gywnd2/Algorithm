@@ -1,6 +1,6 @@
 def quickSort(arr, l, r):
     if l>=r:
-        return
+        return arr
     pivot=l; p=l+1; q=r
     while p<=q:
         while p<=r and arr[p]<=arr[pivot]:
@@ -14,6 +14,6 @@ def quickSort(arr, l, r):
     quickSort(arr, l, q-1)
     quickSort(arr, q+1, r)
 
-arr=[4,8,2,7,5,9,0,1,6,3]
+arr=[10,1,5,8,7,6,4,3,2,9]
 quickSort(arr, 0, len(arr)-1)
 print(arr)

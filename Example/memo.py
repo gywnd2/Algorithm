@@ -1,16 +1,6 @@
 """
 dp fibonacci
-import sys
-n=int(sys.stdin.readline())
-fiboMem=list(0 for _ in range(n+1))
-def fibonacci(num):
-    if num==1 or num==2:
-        fiboMem[num]=1
-    elif fiboMem[num]!=0:
-        return fiboMem[num]
-    else:
-        fiboMem[num]=fibonacci(num-1)+fibonacci(num-2)
-    return fiboMem[num]
+
 
 def binSearch(arr, target):
     l=0; r=len(arr)-1
@@ -189,7 +179,18 @@ def threeWayQuick(arr, start, end):
     threeWayQuick(arr, start, l-1)
     threeWayQuick(arr, r+1, end)
 
-arr=[5,3,8,2,6,3,0,1]
+arr=[5,4,3,2,1]
 arr2=[0,1,2,3,4,5,6,7,8,9,10]
-threeWayQuick(arr, 0, len(arr)-1)
-print(arr)
+print(mergeSort(arr))
+
+import sys
+n=int(sys.stdin.readline())
+fiboMem=list(0 for _ in range(n+1))
+def fibonacci(num):
+    if num==1 or num==2:
+        fiboMem[num]=1
+    elif fiboMem[num]!=0:
+        return fiboMem[num]
+    else:
+        fiboMem[num]=fibonacci(num-1)+fibonacci(num-2)
+    return fiboMem[num]
