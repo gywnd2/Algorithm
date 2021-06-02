@@ -12,9 +12,35 @@
 ################
 import sys
 N, M=map(int, sys.stdin.readline().strip().split())
-A, B, d=map(int, input().split())
-visited=[[0]*N for _ in range[M]]
+A, B, d=map(int, sys.stdin.readline().strip().split())
+visited=[[False]*N for _ in range(M)]
+visited[A][B]=True
 world=list(list(map(int, sys.stdin.readline().strip().split())) for _ in range(M))
-count=0
-directionX=[-1, 0, 1, 0]; directionY=[0, 1, 0, -1]
-def left():
+directionX=[0, 1, 0, -1]; directionY=[-1, 0, 1, 0]
+count=1; turn_time=0
+
+def turn_left():
+    global direction
+    direction-=1
+    if direction==-1:
+        direction=3
+
+while True:
+    turn_left()
+    nx=x+directionX[d]
+    ny=y+directionY[d]
+    if d[nx][ny]==0 and world[nx][ny]:
+        d[nx][ny]=1
+        x=nx; y=ny; count+=1
+        turn_time=0
+        continue
+    else:
+        turn_time+=1
+    if turn_time==4:
+        nx=x-directionX[d]
+        ny=y-directionY[d]
+        if array[nx][ny]==0:
+            x=nx; y=ny
+        else: break
+        turn_time=0
+print(count)
