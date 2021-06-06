@@ -7,9 +7,6 @@ class Node:
         self.right = None
         self.visited = False
 
-    def __str__(self):
-        return str(self.val)
-
 class Tree:
     def __init__(self):
         self.root = None
@@ -21,9 +18,8 @@ class Tree:
         rootNode.right = nodeR
 
 # Define node with list before make tree
-nodes = [Node(15), Node(3), Node(4), Node(2), Node(7),
-         Node(6), Node(10), Node(1), Node(5), Node(9),
-         Node(8), Node(12), Node(13), Node(11), Node(14)]
+nodes = [Node(10), Node(4), Node(9), Node(3), Node(1),
+         Node(2), Node(7), Node(5), Node(6)]
 
 # Assign Tree class variable
 myTree = Tree()
