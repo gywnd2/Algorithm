@@ -1,151 +1,131 @@
-def binSearchIter(arr, key):
-    l=0; r=len(arr)-1; mid=l+(r-l)//2
-    while l<=r:
-        if arr[mid]==key:
-            return mid
-        elif arr[mid]<key:
-            l=mid+1
-        else:
-            r=mid-1
-    return -1
+from collections import deque
+import sys
+INF=sys.maxsize
+vColor=[]
 
-def binSearchRecur(arr, key, start, end):
-    if start>end:
-        return -1
-    else:
-        mid=start+(end-start)//2
-        if arr[mid]==key:
-            return mid
-        elif arr[mid]<key:
-            return binSearchRecur(arr, key, mid+1, end)
-        else:
-            return binSearchRecur(arr, key, start, mid-1)
+def promising(i):
+    j=1; good=True
+    while j<i and good:
+        if W[i][j] and vColor[i]==vColor[j]:
+            good=False
+        j+=1
+    return good
 
-def selectionSort(arr):
+def mColoring(i):
+    if promising(i):
+        if i==n:
+            print(vColor)
+        else:
+            for color in range(2, m):
+                vColor.append(color)
+                mColoring(i)
+
+def dfs(graph, v, visited):
+    visited[v]=True
+    print(v, end=' ')
+    for i in graph[v]:
+        if not visited[i]:
+            dfs(graph, i, visited)
+
+def bfs(graph, start, visited):
+    queue=deque([start])
+    visited[start]=True
+    while queue:
+        v=queue.popleft()
+        print(v, end=' ')
+        for i in graph[v]:
+            if not visited[i]:
+                queue.append(i)
+                visited[i]=True
+
+def countSortOrigin(arr, r):
+    count=[0 for _ in range(r+1)]
+    for digit in arr:
+        count[digit]+=1
+
+    for i in range(len(count)):
+        if count[i]!=0:
+            for _ in range(count[i]):
+                print(i, end=' ')
+
+def countSort(arr, digit):
+    temp=[0 for _ in range(len(arr))]
+    cnt=[0 for _ in range(10)]
     for i in range(len(arr)):
-        min=i
-        for j in range(i+1, len(arr)):
-            if arr[j]<arr[min]:
-                min=j
-        arr[min], arr[i]=arr[i], arr[min]
+        # 맨 끝자리 숫자 구하기
+        cnt[(arr[i]//digit)%10]+=1
+    for i in range(1, 10):
+        # cnt 누적하기
+        cnt[i]=cnt[i]+cnt[i-1]
+    for i in range(len(arr)-1, -1, -1):
+        # 맨 끝자리 숫자 구하기
+        cntValue=(arr[i]//digit)%10
+        # cnt 인덱스 하나 감소한 다음
+        newIdx=cnt[cntValue]-1
+        # temp의 해당 인덱스에 해당 숫자 대입
+        temp[newIdx]=arr[i]
+        # cntValue에서 1 감소
+        cnt[cntValue]-=1
+    return temp
 
-def insertionSort(arr):
-    for i in range(1, len(arr)):
-        for j in range(i, 0, -1):
-            if arr[j]<arr[j-1]:
-                arr[j], arr[j-1]=arr[j-1], arr[j]
+def radixSort(arr):
+    i=1
+    maxVal=max(arr)
+    while maxVal//i>0:
+        arr=countSort(arr, i)
+        i*=10
+    return arr
+
+weight=[6, 4, 3, 6]; profit=[13, 8, 6, 12]; W=[[]]
+N=4; K=7
+
+def knapsack(W, weight, profit, n):
+    K=[[0 for x in range(W+1)] for x in range(n+1)]
+    for i in range(n+1):
+        for w in range(W+1):
+            if i==0 or w==0:
+                K[i][w]=0
+            elif weight[i-1]<=w:
+                K[i][w]=max(K[i-1][w-weight[i-1]]+profit[i-1], K[i-1][w])
             else:
-                break
+                K[i][w]=K[i-1][w]
+    return K[n][W]
 
-def mergeSort(arr):
-    if len(arr)<=1:
-        return arr
-    mid=len(arr)//2
-    left=arr[:mid]
-    right=arr[mid:]
-    left=mergeSort(left)
-    right=mergeSort(right)
-    mergeSort(left)
-    mergeSort(right)
-    return merge(left, right)
+a=[[0, 2, INF, 4], [2, 0, INF, 5], [3, INF, 0, INF], [INF, 2, 1, 0]]
 
-def merge(left, right):
-    result=[]
-    while len(left)>0 or len(right)>0:
-        while len(left)>0 and len(right)>0:
-            if left[0]<=right[0]:
-                result.append(left[0])
-                left=left[1:]
-            else:
-                result.append(right[0])
-                right=right[1:]
-        while len(left)>0:
-            result.append(left[0])
-            left=left[1:]
-        while len(right)>0:
-            result.append(right[0])
-            right=right[1:]
-    return result
+def floyd():
+    dist=[[INF]*4 for _ in range(4)]
+    for i in range(4):
+        for j in range(4):
+            dist[i][j]=a[i][j]
+    for k in range(4):
+        for i in range(4):
+            for j in range(4):
+                if dist[i][j]>dist[i][k]+dist[k][j]:
+                    dist[i][j]=dist[i][k]+dist[k][j]
+    return dist
 
-def quickSort(arr, start, end):
-    if start>=end:
-        return 
-    pivot=start; l=start+1; r=end
-    while l<=r:
-        while l<=end and arr[l]<=arr[pivot]:
-            l+=1
-        while r>start and arr[r]>arr[pivot]:
-            r-=1
-        if l>r:
-            arr[r], arr[pivot]=arr[pivot], arr[r]
-        else:
-            arr[l], arr[r]=arr[r], arr[l]
-    quickSort(arr, start, r-1)
-    quickSort(arr, r+1, end) 
+arr=[
+    1,3,2,4,3,2,5,3,1,2,
+    3,4,2,4,5,2,1,3,5,2,
+    1,2,2,4,4,2,3,1,2,5
+]
 
-def threeWayQuick(arr, start, end):
-    if start>=end:
-        return
-    pivot=arr[start]; l=start; mid=start+1; r=end
-    while mid<=r:
-        if arr[mid]<pivot:
-            arr[mid], arr[l]=arr[l], arr[mid]
-            l+=1
-            mid+=1
-        elif arr[mid]>pivot:
-            arr[mid], arr[r]=arr[r], arr[mid]
-            r-=1
-        else:
-            mid+=1
-    threeWayQuick(arr, start, l-1)
-    threeWayQuick(arr, r+1, end)
+# 각 노드와 그 인접한 노드를 작은 순으로 입력
+graph=[
+    [],
+    [2, 3, 8],
+    [1, 7],
+    [1, 4, 5],
+    [3, 5],
+    [3, 4],
+    [7],
+    [2, 6, 8],
+    [1, 7]
+]
 
-def fibIter(x):
-    fib=[0 for _ in range(x+1)]; fib[0]=0; fib[1]=1
-    for i in range(2, len(fib)):
-        fib[i]=fib[i-1]+fib[i-2]
-    return fib[x]
+# 모든 노드의 방문여부는 False에서 시작
+visited=[False]*9 
 
-def fibRecur(x):
-    if x<=1:
-        return x
-    else:
-        return fibRecur(x-1)+fibRecur(x-2)
-
-def fibDP(x):
-    if fibMem[x]!=-1:
-        return fibMem[x]
-    else:
-        fibMem[x]=fibDP(x-1)+fibDP(x-2)
-        return fibMem[x]
-
-def recursiveChange(money, count):
-    if money==0:
-        return count
-    else:
-        if money>=coins[0]:
-            return min(recursiveChange(money-coins[0], count+1),
-                        recursiveChange(money-coins[1], count+1),
-                        recursiveChange(money-coins[2], count+1))
-        elif money>=coins[1]:
-            return min(recursiveChange(money-coins[1], count+1),
-                        recursiveChange(money-coins[2], count+1))
-        elif money>=coins[2]:
-            return recursiveChange(money-coins[2], count+1)    
-
-def dpChange(money, coins):
-    changes=[0 for _ in range(money+1)]; changes[6]=1; changes[5]=1; changes[1]=1
-    for m in range(1, money+1):
-        for coin in coins:
-            # 금액이 동전보다 크고 단위 동전이 아니라면
-            if m>=coin and changes[m]!=1:
-                minCoins=changes[m-coin]+1
-                # 계산 된적이 없거나 더 작은 갯수가 나왔다면
-                if changes[m]==0 or minCoins<changes[m]:
-                    changes[m]=minCoins        
-    return changes[m]
-                        
-coins=[6, 5, 1]
-fibMem=[-1 for _ in range(1001)]; fibMem[0]=0; fibMem[1]=1
-arr=[6,3,8,5,2,2,9,9,5,4,8,4,2,234342342344,12312242,23,242377887867,2342342352341242]
-print(dpChange(50, coins))
+dist = floyd()
+#arr=radixSort(arr)
