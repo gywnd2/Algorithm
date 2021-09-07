@@ -1,12 +1,12 @@
 from collections import deque
 import sys
 INF=sys.maxsize
-vColor=[]
+graph=[[]]; vColor=[]
 
 def promising(i):
     j=1; good=True
     while j<i and good:
-        if W[i][j] and vColor[i]==vColor[j]:
+        if graph[i][j] and vColor[i]==vColor[j]:
             good=False
         j+=1
     return good
@@ -20,6 +20,14 @@ def mColoring(i):
                 vColor.append(color)
                 mColoring(i)
 
+def sumofsubset(i, weight, total):
+    # weight+w[i+1]>W or weight+total<W ì¼ ê²½ìš° ìœ ë§í•˜ì§€ ì•ŠìŒ
+    if weight+total>=W and (weight==W or weight+w[i+1]<=W):
+        if W==weight:
+            print(~~)
+    else:
+        sumofsubset(i+1, weight, total)
+
 def dfs(graph, v, visited):
     visited[v]=True
     print(v, end=' ')
@@ -32,7 +40,6 @@ def bfs(graph, start, visited):
     visited[start]=True
     while queue:
         v=queue.popleft()
-        print(v, end=' ')
         for i in graph[v]:
             if not visited[i]:
                 queue.append(i)
@@ -42,29 +49,21 @@ def countSortOrigin(arr, r):
     count=[0 for _ in range(r+1)]
     for digit in arr:
         count[digit]+=1
-
     for i in range(len(count)):
         if count[i]!=0:
-            for _ in range(count[i]):
-                print(i, end=' ')
-
+            print(i*count[i],end='')
+    
 def countSort(arr, digit):
     temp=[0 for _ in range(len(arr))]
     cnt=[0 for _ in range(10)]
-    for i in range(len(arr)):
-        # ¸Ç ³¡ÀÚ¸® ¼ýÀÚ ±¸ÇÏ±â
+    for i in range(arr):
         cnt[(arr[i]//digit)%10]+=1
     for i in range(1, 10):
-        # cnt ´©ÀûÇÏ±â
         cnt[i]=cnt[i]+cnt[i-1]
     for i in range(len(arr)-1, -1, -1):
-        # ¸Ç ³¡ÀÚ¸® ¼ýÀÚ ±¸ÇÏ±â
         cntValue=(arr[i]//digit)%10
-        # cnt ÀÎµ¦½º ÇÏ³ª °¨¼ÒÇÑ ´ÙÀ½
         newIdx=cnt[cntValue]-1
-        # tempÀÇ ÇØ´ç ÀÎµ¦½º¿¡ ÇØ´ç ¼ýÀÚ ´ëÀÔ
         temp[newIdx]=arr[i]
-        # cntValue¿¡¼­ 1 °¨¼Ò
         cnt[cntValue]-=1
     return temp
 
@@ -76,56 +75,87 @@ def radixSort(arr):
         i*=10
     return arr
 
-weight=[6, 4, 3, 6]; profit=[13, 8, 6, 12]; W=[[]]
-N=4; K=7
-
-def knapsack(W, weight, profit, n):
-    K=[[0 for x in range(W+1)] for x in range(n+1)]
+def knapsack(limit, weight, profit, n):
+    K=[[0 for _ in range(limit+1)] for _ in range(n+1)]
     for i in range(n+1):
-        for w in range(W+1):
+        for w in range(limit+1):
             if i==0 or w==0:
                 K[i][w]=0
             elif weight[i-1]<=w:
                 K[i][w]=max(K[i-1][w-weight[i-1]]+profit[i-1], K[i-1][w])
             else:
                 K[i][w]=K[i-1][w]
-    return K[n][W]
-
-a=[[0, 2, INF, 4], [2, 0, INF, 5], [3, INF, 0, INF], [INF, 2, 1, 0]]
+    return K[n][limit]
 
 def floyd():
-    dist=[[INF]*4 for _ in range(4)]
-    for i in range(4):
-        for j in range(4):
-            dist[i][j]=a[i][j]
-    for k in range(4):
-        for i in range(4):
-            for j in range(4):
-                if dist[i][j]>dist[i][k]+dist[k][j]:
-                    dist[i][j]=dist[i][k]+dist[k][j]
-    return dist
+    nodes=int(input())
+    edges=int(input())
+    dist=[[INF]*(n+1) for _ in range(n+1)]
 
-arr=[
-    1,3,2,4,3,2,5,3,1,2,
-    3,4,2,4,5,2,1,3,5,2,
-    1,2,2,4,4,2,3,1,2,5
-]
+    for i in range(1, nodes+1):
+        for j in range(1, nodes+1):
+            if i==j:
+                dist[i][j]=0
+    
+    for _ in range(edges):
+        a, b, c=map(int, input().split())
+        dist[a][b]=c
 
-# °¢ ³ëµå¿Í ±× ÀÎÁ¢ÇÑ ³ëµå¸¦ ÀÛÀº ¼øÀ¸·Î ÀÔ·Â
-graph=[
-    [],
-    [2, 3, 8],
-    [1, 7],
-    [1, 4, 5],
-    [3, 5],
-    [3, 4],
-    [7],
-    [2, 6, 8],
-    [1, 7]
-]
+    for k in range(1, nodes+1):
+        for i in range(1, nodes+1):
+            for j in range(1, nodes+1):
+                dist[i][j]=min(dist[i][j], dist[i][k]+dist[k][j])
+    
+    for i in range(1, nodes+1):
+        for j in range(1, nodes+1):
+            if dist[i][j]==INF:
+                print("INFINITY", end='')
+            else:
+                print(dist[i][j], end='')
+        print()
 
-# ¸ðµç ³ëµåÀÇ ¹æ¹®¿©ºÎ´Â False¿¡¼­ ½ÃÀÛ
-visited=[False]*9 
+def get_smallest_node():
+    min_value=INF
+    index=0
+    for i in range(1, n+1):
+        if dist[i]<min_value and not visited[i]:
+            min_value=dist[i]
+            index=i
+    return index
 
-dist = floyd()
-#arr=radixSort(arr)
+def dijkstra(start):
+    dist[start]=0
+    visited[start]=True
+    for j in graph[start]:
+        dist[j[0]]=j[1]
+    for i in range(n-1):
+        now=get_smallest_node()
+        visited[now]=True
+        for j in graph[now]:
+            cost=dist[now]+j[1]
+            if cost<dist[j[0]]:
+                dist[j[0]]=cost
+
+def bellmanford(start):
+    dist[start]=0
+    for i in range(n):
+        for j in range(m):
+            curr_node=edges[j][0]
+            next_node=edges[j][1]
+            cost=edges[j][2]
+            if dist[curr_node]!=INF and dist[next_node]>dist[curr_node]+cost:
+                dist[next_node]=dist[curr_node]+cost
+                if i==n-1:
+                    return True
+    return False
+
+negative_cycle=bellmanford(1)
+
+if negative_cycle:
+    print("-1")
+else:
+    for i in range(2, n+1):
+        if dist[i]==INF:
+            print("-1")
+        else:
+            print(dist[i])
