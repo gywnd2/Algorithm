@@ -1,3 +1,4 @@
+# 으렵군..
 from collections import deque
 
 n, k = map(int, input().split())
