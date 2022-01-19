@@ -28,13 +28,12 @@ for _ in range(t):
             try:
                 # R이 홀수면
                 if reverse:
-                    # 뒤집고
-                    string.reverse()
+                    string.pop()
                     # R의 홀/짝 다시 세기
-                    reverse = False
-                    
-                # 첫 번째 수 버리기
-                string.popleft()
+                    # reverse = False
+                else:                    
+                    # 첫 번째 수 버리기
+                    string.popleft()
                 
             # 원소가 0개면
             except:
@@ -49,4 +48,5 @@ for _ in range(t):
             string.reverse()
         print("["+",".join(string)+"]")
     # 에러확인 플래그 초기화
+    reverse=False
     error=False
