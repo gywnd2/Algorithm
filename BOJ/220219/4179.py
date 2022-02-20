@@ -4,7 +4,7 @@ from collections import deque
 r, c=map(int, sys.stdin.readline().strip().split())
 maze=[list(input()) for _ in range(r)]
 hQueue, fQueue=deque(), deque()
-dx, dy=[1, 0, -1, 0], [0, 1, 0, -1]
+dx, dy=[1, -1, 0, 0], [0, 0, 1, -1]
 hGraph, fGraph=[[0]*c for _ in range(r)], [[0]*c for _ in range(r)]
 
 # 지훈이와 불 위치 확인
