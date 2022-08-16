@@ -3,11 +3,13 @@ import sys
 
 n,k=map(int, sys.stdin.readline().strip().split())
 
-dx=[-1, 1, 0]
+# 순간이동이 먼저 수행 되도록 해야함
+dx=[0, 1, -1]
 q=deque()
 visited=[sys.maxsize for _ in range(100001)]
 q.append(n)
 visited[n]=0
+dist=[]
 
 def bfs():
     while q:
@@ -25,6 +27,5 @@ def bfs():
                 nx=x+dx[i]
                 if 0<=nx<100001 and visited[nx]==sys.maxsize:
                     q.append(nx)
-                    visited[nx]=min(visited[nx], visited[x]+1)
-
+                    visited[nx]=visited[x]+1
 bfs()
