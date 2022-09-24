@@ -1,0 +1,12 @@
+answer = "one4seveneight"
+answer.replace('zero', '0')
+answer=answer.replace('one', '1')
+answer.replace('two', '2')
+answer.replace('three', '3')
+answer.replace('four', '4')
+answer.replace('five', '5')
+answer.replace('six', '6')
+answer.replace('seven', '7')
+answer.replace('eight', '8')
+answer.replace('nine', '9')
+print(answer)

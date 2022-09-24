@@ -24,14 +24,10 @@ def watch(x, y, direction, tmp):
             else:
                 break
             
+            # 이렇게 하면 0이 아니면 그냥 break 되어버림
+            # 0이 아니지만 더 탐색할 수 있는 경우(6이 아닌 나머지인 경우)를 고려해야함
             # if 0<=nx<n and 0<=ny<m and tmp[nx][ny]==0:
-            #     # if tmp[nx][ny] == 0:
             #         tmp[nx][ny] = '#'
-            # else:
-            #     break
-            
-            # if 0<=nx<n and 0<=ny<m and tmp[nx][ny]==0:
-            #     tmp[nx][ny]=='#'
             # else:
             #     break
             
