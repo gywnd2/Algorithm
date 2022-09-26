@@ -1,6 +1,7 @@
 import sys
 from collections import deque
 q=deque()
+
 def bfs():
     while q:
         x, y, wall=q.popleft()
@@ -9,17 +10,14 @@ def bfs():
         for i in range(4):
             nx=x+dx[i]
             ny=y+dy[i]
-            # print('nx :',nx,'ny :',ny,'wall :', wall)
-            # print('visited[x][y][wall]=',visited[x][y][wall])
             if 0<=nx<n and 0<=ny<m:
                 if board[nx][ny]=='0' and visited[nx][ny][wall]==sys.maxsize:
                     q.append((nx, ny, wall))
                     visited[nx][ny][wall]=visited[x][y][wall]+1
-                    # print('visited[nx][ny][wall] :',visited[nx][ny][wall], 'visited[nx][ny][wall]+1 :', visited[nx][ny][wall]+1)
-                elif wall<k and board[nx][ny]=='1' and visited[nx][ny][wall]==sys.maxsize:
+                # visited[nx][ny][wall+1]==sys.maxsize!!! wall이 아니라 벽을 뚫을 대상인 wall+1을 확인 해야 함!!!!
+                elif wall<k and board[nx][ny]=='1' and visited[nx][ny][wall+1]==sys.maxsize:
                     q.append((nx, ny, wall+1))
                     visited[nx][ny][wall+1]=visited[x][y][wall]+1
-                    # print('visited[nx][ny][wall+1] :',visited[nx][ny][wall+1], 'visited[nx][ny][wall]+1 :', visited[nx][ny][wall]+1)
     return -1
                 
                 
