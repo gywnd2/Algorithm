@@ -1,11 +1,12 @@
 import sys
+from bisect import bisect_left, bisect_right
 n, x=map(int, sys.stdin.readline().strip().split())
 num=list(map(int, sys.stdin.readline().strip().split()))
 
-start=bisect_left(num, x)+1
-end=bisect_left(num, x)+1
+start=bisect_left(num, x)
+end=bisect_right(num, x)
 
-if len(num[start:end])==0:
+if end-start==0:
     print(-1)
 else:
-    print(len(num[start:end]))
+    print(end-start)
