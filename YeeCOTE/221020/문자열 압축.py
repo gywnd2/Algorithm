@@ -17,8 +17,7 @@ def solution(s):
                     if tmp[idx]==tmp[idx+1]:
                         count+=1
                         res+=str(count)
-                        for i in tmp[idx:idx+count]:
-                            res+=i
+                        res+=tmp[idx]
                     else:
                         for i in tmp[idx:]:
                             res+=i
