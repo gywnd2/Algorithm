@@ -1,47 +1,31 @@
 import sys
-from collections import deque
-n, m=map(int, sys.stdin.readline().strip().split())
-ice=[list(map(int, sys.stdin.readline().strip().split())) for _ in range(n)]
 
-dx, dy=[-1, 1, 0, 0], [0, 0, -1, 1]
-visited=[[False for _ in range(m)] for _ in range(n)]
-q=deque()
-time=0
+N = int(sys.stdin.readline())
+assembly_line = [list(map(int, sys.stdin.readline().split())) for _ in range(N)] 
 
-def bfs():
-    global time
-    while q:
-        x, y=q.popleft()
-        visited[x][y]=True
-        count=0
-        for i in range(4):
-            nx=x+dx[i]
-            ny=y+dy[i]
-            if 0<=nx<n and 0<=ny<m and ice[nx][ny]==0:
-                count+=1
-        if count>=2:
-            ice[x][y]=0
-        # for row in ice:
-        #     print(row)
-        # print()
-    time+=1
+# Dynamic Programiing 활용
+dp = [[0,0]] * N
+dp[0] = [assembly_line[0][0], assembly_line[0][1]]
 
-isIceExist=False
-while True:
-    for i in range(n):
-        for j in range(m):
-            if ice[i][j]==1:
-                count=0
-                for k in range(4):
-                    nx=i+dx[k]
-                    ny=j+dy[k]
-                    if 0<=nx<n and 0<=ny<m and ice[nx][ny]==0:
-                        count+=1
-                if count>=2:
-                    isIceExist=True
-                    q.append((i, j))
-    if not isIceExist:
-        break
-    isIceExist=False
-    bfs()
-print(time)   
+for i in range(1, N):
+    dp[i] = [min(dp[i-1][0], dp[i-1][1] + assembly_line[i-1][3]) + assembly_line[i][0], # A 조립라인
+             min(dp[i-1][1], dp[i-1][0] + assembly_line[i-1][2]) + assembly_line[i][1]] # B 조립라인
+
+print(min(dp[N-1])) 
+
+
+# import sys
+# n=int(sys.stdin.readline().strip())
+# #Ai / Bi / Ai to Bi+1 / Bi to Ai+1 / AN / BN
+# cost=list(map(int, sys.stdin.readline().strip().split()))
+# cost.extend(list(map(int, sys.stdin.readline().strip().split())))
+# dp=[[0 for _ in range(n)] for _ in range(2)]
+# dp[0][0], dp[1][0]=cost[0], cost[1]
+# for i in range(1, n):
+#     if i<n-1:
+#         dp[0][i]=min(dp[0][i-1], dp[1][i-1]+cost[3])+cost[0]
+#         dp[1][i]=min(dp[1][i-1], dp[0][i-1]+cost[2])+cost[1]
+#     else:
+#         dp[0][i]=min(dp[0][i-1], dp[1][i-1]+cost[3])+cost[4]
+#         dp[1][i]=min(dp[1][i-1], dp[0][i-1]+cost[2])+cost[5]
+# print(min(dp[0][n-1], dp[1][n-1]))
