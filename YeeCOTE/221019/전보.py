@@ -1,28 +1,32 @@
-import sys, heapq
-n, m, c=map(int, sys.stdin.readline().strip().split())
-graph=[[] for _ in range(n+1)]
-distance=[sys.maxsize for _ in range(n+1)]
-maxCost=0; count=0
-for _ in range(m):
-    start, dest, cost=map(int, sys.stdin.readline().strip().split())
-    graph[start].append((dest, cost))
-    
+import heapq, sys
+input=sys.stdin.readline
+
+N, M, C=map(int, input().split())
+graph=[[] for _ in range(N+1)]
+distance=[int(1e9) for _ in range(N+1)]
+city=[]; res=0; maxCost=0
+for _ in range(M):
+    a, b, c=map(int, input().split())
+    graph[a].append((b, c))
+
 def dijikstra(start):
-    global count, maxCost
+    global maxCost
     q=[]
-    heapq.heappush(q, (0, start))
     distance[start]=0
+    heapq.heappush(q, (0, start))
     while q:
         dist, now=heapq.heappop(q)
-        count+=1
-        maxCost=max(maxCost, dist)
         if distance[now]<dist:
             continue
         for i in graph[now]:
-            cost=dist+i[1]
+            if i[1] not in city :
+                city.append(i[1])
+            cost=distance[now]+i[1]
             if cost<distance[i[0]]:
                 distance[i[0]]=cost
+                maxCost=max(maxCost, cost)
                 heapq.heappush(q, (cost, i[0]))
 
-dijikstra(start)
-print(count-1, maxCost)
+dijikstra(C)
+
+print(len(city), maxCost)
