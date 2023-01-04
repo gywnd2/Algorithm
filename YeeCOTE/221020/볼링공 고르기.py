@@ -1,11 +1,11 @@
-import sys
-n, m=map(int, sys.stdin.readline().strip().split())
-balls=list(map(int, sys.stdin.readline().strip().split()))
-balls.sort(reverse=True)
-count=0
-for a in range(n):
-    for b in range(a, n):
-        if balls[a]!=balls[b]:
-            count+=1
+N, M=map(int, input().split())
+balls=list(map(int, input().split()))
+balls.sort()
 
-print(count)
+result=0
+for i in range(N):
+    for j in range(i, N):
+        if balls[i]!=balls[j]:
+            result+=1
+
+print(result)
